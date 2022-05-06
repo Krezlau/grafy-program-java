@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jimp.grafyprogram.MainController">
+   <children>
+      <Canvas fx:id="graphCanvas" height="930.0" layoutX="10.0" layoutY="100.0" onMouseClicked="#onCanvasMouseClick" width="980.0" />
+      <TextField fx:id="gridSizeTextField" layoutX="72.0" layoutY="14.0" prefHeight="25.0" prefWidth="100.0" />
+      <TextField fx:id="edgeWeightTextField" layoutX="304.0" layoutY="14.0" prefWidth="100.0" />
+      <Label layoutX="14.0" layoutY="18.0" text="Grid size:" />
+      <Label layoutX="192.0" layoutY="18.0" text="Edge weight range:" />
+      <Button layoutX="424.0" layoutY="14.0" mnemonicParsing="false" onAction="#onGenerateButtonClick" text="Generate" />
+      <Button layoutX="510.0" layoutY="14.0" mnemonicParsing="false" onAction="#onRedrawButtonClick" text="Redraw" />
+      <Button layoutX="871.0" layoutY="14.0" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Save" />
+      <Button layoutX="586.0" layoutY="14.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" text="Delete" />
+      <Button layoutX="923.0" layoutY="14.0" mnemonicParsing="false" onAction="#onImportButtonClick" text="Import" />
+      <TextField fx:id="filePathTextField" layoutX="715.0" layoutY="14.0" />
+      <Label layoutX="657.0" layoutY="18.0" text="File path:" />
+      <Button layoutX="857.0" layoutY="56.0" mnemonicParsing="false" text="Sprawdź spójność" onAction="#onBfsButtonClick"/>
+      <Label layoutX="489.0" layoutY="60.0" text="Wybrane węzły:" />
+      <Label layoutX="580.0" layoutY="51.0" text="2">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Button layoutX="681.0" layoutY="56.0" mnemonicParsing="false" text="Znajdź najkrótszą ścieżkę" onAction="#onDijkstraButtonClick" />
+      <Button layoutX="615.0" layoutY="56.0" mnemonicParsing="false" text="Reset" onAction="#onResetButtonClick"/>
+   </children>
+</AnchorPane>
