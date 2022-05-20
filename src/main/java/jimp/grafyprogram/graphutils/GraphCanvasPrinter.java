@@ -28,6 +28,9 @@ public class GraphCanvasPrinter extends GraphPrinter{
     }
 
     //TODO gradient
+    //poczatek 0,255,0
+    //srodek 0,255,255
+    //koniec 0,0,255
     @Override
     public void print(){
         GraphicsContext gc = graphCanvas.getGraphicsContext2D();
@@ -35,11 +38,13 @@ public class GraphCanvasPrinter extends GraphPrinter{
 
         int nodeIndex = 0;
 
+        double [] edgeRange = determineEdgeRange();
+
         // variables to use for gc.fillOval()
         double nodeX;
         double nodeY = 10;
 
-        //variables determining acutal circle center
+        //variables determining actual circle center
         double nodeCenterX;
         double nodeCenterY = 10 + ovalSize/2;
 
@@ -47,29 +52,30 @@ public class GraphCanvasPrinter extends GraphPrinter{
             nodeX = 10;
             nodeCenterX = 10 + ovalSize/2;
             for (int col = 0; col < graph.getCollumns(); col++) {
-                gc.setFill(Color.RED);
                 for (Edge edge : graph.getNodes().get(nodeIndex).getEdges()){
                     if (edge.getNodeId() == nodeIndex - 1){
+                        gc.setFill(determineColor(edge.getWeight(), edgeRange[0], edgeRange[1]));
                         gc.fillRect(nodeCenterX - nodeSize, nodeCenterY - edgeSize/2, nodeSize, edgeSize);
 
                         // filling previous node oval in order for it to be on top
                         gc.setFill(Color.WHITE);
                         gc.fillOval(nodeX - nodeSize, nodeY, ovalSize, ovalSize);
-                        gc.setFill(Color.RED);
                     }
                     if (edge.getNodeId() == nodeIndex + 1){
+                        gc.setFill(determineColor(edge.getWeight(), edgeRange[0], edgeRange[1]));
                         gc.fillRect(nodeCenterX, nodeCenterY - edgeSize/2, nodeSize, edgeSize);
                     }
                     if (edge.getNodeId() == nodeIndex + graph.getCollumns()){
+                        gc.setFill(determineColor(edge.getWeight(), edgeRange[0], edgeRange[1]));
                         gc.fillRect(nodeCenterX - edgeSize/2, nodeCenterY, edgeSize, nodeSize);
                     }
                     if (edge.getNodeId() == nodeIndex - graph.getCollumns()){
+                        gc.setFill(determineColor(edge.getWeight(), edgeRange[0], edgeRange[1]));
                         gc.fillRect(nodeCenterX - edgeSize/2, nodeCenterY - nodeSize , edgeSize, nodeSize);
 
                         // filling previous node oval in order for it to be on top
                         gc.setFill(Color.WHITE);
                         gc.fillOval(nodeX, nodeY - nodeSize, ovalSize, ovalSize);
-                        gc.setFill(Color.RED);
                     }
                 }
 
@@ -153,4 +159,50 @@ public class GraphCanvasPrinter extends GraphPrinter{
         return nodeSize;
     }
 
+    private double [] determineEdgeRange(){
+        double [] edgeRange = new double[2];
+        edgeRange[0] = 999999999;
+        edgeRange[1] = 0;
+
+        for (Node node : graph.getNodes()){
+            for (Edge edge : node.getEdges()){
+                if (edge.getWeight() > edgeRange[1]){
+                    edgeRange[1] = edge.getWeight();
+                }
+                if (edge.getWeight() < edgeRange[0]){
+                    edgeRange[0] = edge.getWeight();
+                }
+            }
+        }
+        return edgeRange;
+    }
+
+    public Color determineColor(double value, double rangeStart, double rangeEnd){
+        // start(255,0,0) -> stop1(255,255,0) -> stop2(0,255,0) -> stop3(0,255,255) -> end(0,0,255)
+        double stop1 = (rangeEnd - rangeStart) / 4 + rangeStart;
+        double stop2 = (rangeEnd - rangeStart) / 4 + stop1;
+        double stop3 = (rangeEnd - rangeStart) / 4 + stop2;
+        double ratio = 255 / ((rangeEnd - rangeStart) / 4);
+
+        if (value <= stop1){
+            return Color.rgb(255,
+                            (int) ((value - rangeStart) * ratio),
+                            0);
+        }
+        if (value <= stop2){
+            return Color.rgb((int) ((value - stop2) * (-ratio)),
+                            255,
+                            0);
+        }
+        if (value <= stop3){
+            return Color.rgb(0,
+                            255,
+                            (int) ((value - stop2) * ratio));
+        }
+        else{
+            return Color.rgb(0,
+                            (int) ((value - rangeEnd) * (-ratio)),
+                            255);
+        }
+    }
 }

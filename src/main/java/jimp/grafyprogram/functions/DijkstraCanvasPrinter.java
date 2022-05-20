@@ -52,4 +52,24 @@ public class DijkstraCanvasPrinter extends Dijkstra{
             current = graph.getNodes().get(distances[current.getNodeId()].getPrecedingNodeId());
         }
     }
+
+    public void makeGradient(){
+        GraphCanvasPrinter gcp = new GraphCanvasPrinter(graph, graphCanvas);
+        double max = findMaxDistance();
+
+        for (NodeDistance nodeDistance : distances){
+                gcp.paintNode(graph.getNodes().get(nodeDistance.getNodeId()),
+                        gcp.determineColor(nodeDistance.getDistance(), 0, max));
+        }
+    }
+
+    private double findMaxDistance(){
+        double max = 0;
+        for (NodeDistance nodeDistance : distances){
+            if (nodeDistance.getDistance() > max){
+                max = nodeDistance.getDistance();
+            }
+        }
+        return max;
+    }
 }
