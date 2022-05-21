@@ -16,9 +16,6 @@ import jimp.grafyprogram.graphutils.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-// TODO
-// (?) jakiś gradient jeśli chodzi o krawędzie
-// testy dijkstry
 
 public class MainController implements Initializable {
 
@@ -48,26 +45,38 @@ public class MainController implements Initializable {
 
     @FXML
     public void onGenerateButtonClick() {
+        onDeleteButtonClick();
+
         String gridSizeText = gridSizeTextField.getText();
         String edgeWeightText = edgeWeightTextField.getText();
 
+        int columns, rows;
+        double start, end;
+
         try {
-            int collumns = Integer.parseInt(gridSizeText.split("x")[0]);
-            int rows = Integer.parseInt(gridSizeText.split("x")[1]);
-            double start = Double.parseDouble(edgeWeightText.split("-")[0]);
-            double end = Double.parseDouble(edgeWeightText.split("-")[1]);
-
-            graph = new Graph(collumns, rows, start, end);
-            gridSizeTextField.clear();
-            edgeWeightTextField.clear();
-
-            onRedrawButtonClick();
+            columns = Integer.parseInt(gridSizeText.split("x")[0]);
+            rows = Integer.parseInt(gridSizeText.split("x")[1]);
         }
-        catch(Exception e){
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Akcja nie powiodła się.", ButtonType.OK);
+        catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Błędny format wymiarów grafu.", ButtonType.OK);
             alert.showAndWait();
+            return;
         }
+        try {
+            start = Double.parseDouble(edgeWeightText.split("-")[0]);
+            end = Double.parseDouble(edgeWeightText.split("-")[1]);
+        }
+        catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Błędny format zakresu wag.", ButtonType.OK);
+            alert.showAndWait();
+            return;
+        }
+
+        graph = new Graph(columns, rows, start, end);
+        gridSizeTextField.clear();
+        edgeWeightTextField.clear();
+
+        onRedrawButtonClick();
 
     }
 
@@ -112,6 +121,8 @@ public class MainController implements Initializable {
 
             if (selectedNodes.size() > 0){
                 gcp.paintNode(selectedNodes.get(0), Color.BLUE);
+                DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(graph, graphCanvas, selectedNodes.get(0));
+                dcp.makeGradient();
             }
             for (int i = 1; i < selectedNodes.size(); i++){
                 gcp.paintNode(selectedNodes.get(i), Color.GREEN);
@@ -143,8 +154,7 @@ public class MainController implements Initializable {
 
     @FXML
     public void onDeleteButtonClick() {
-        onResetButtonClick();
-
+        selectedNodes.clear();
         graph = null;
         GraphicsContext gc = graphCanvas.getGraphicsContext2D();
         gc.clearRect(0, 0, graphCanvas.getWidth(), graphCanvas.getHeight());
@@ -162,18 +172,33 @@ public class MainController implements Initializable {
 
     @FXML
     public void onDijkstraButtonClick() {
-        DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(graph, graphCanvas, selectedNodes.get(0));
-        for (int i = 1; i < selectedNodes.size(); i++){
-            dcp.print(selectedNodes.get(i));
+        if (graph != null && selectedNodes.size() > 1) {
+            DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(graph, graphCanvas, selectedNodes.get(0));
+            for (int i = 1; i < selectedNodes.size(); i++) {
+                dcp.print(selectedNodes.get(i));
+            }
+        }
+        if (graph == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Musisz najpierw wczytać graf!", ButtonType.OK);
+            alert.showAndWait();
+            return;
+        }
+        if (selectedNodes.size() == 0){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Nie wybrano węzła startowego i węzłów docelowych", ButtonType.OK);
+            alert.showAndWait();
+            return;
+        }
+        if (selectedNodes.size() == 1){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Nie wybrano żadnego węzła docelowego", ButtonType.OK);
+            alert.showAndWait();
         }
     }
 
     @FXML
     public void onResetButtonClick() {
         if (graph != null) {
-            GraphCanvasPrinter gpc = new GraphCanvasPrinter(graph, graphCanvas);
-            gpc.bleachSelectedNodes(selectedNodes);
             selectedNodes.clear();
+            onRedrawButtonClick();
         }
     }
 }
