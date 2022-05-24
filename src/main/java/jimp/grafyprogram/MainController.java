@@ -7,12 +7,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import jimp.grafyprogram.functions.BfsSolver;
 import jimp.grafyprogram.functions.DijkstraCanvasPrinter;
 import jimp.grafyprogram.graphutils.*;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -64,7 +69,6 @@ public class MainController implements Initializable {
             onRedrawButtonClick();
         }
         catch(Exception e){
-            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, "Akcja nie powiodła się.", ButtonType.OK);
             alert.showAndWait();
         }
@@ -79,8 +83,7 @@ public class MainController implements Initializable {
             if (selected != null) {
                 if (selectedNodes.size() == 0) {
                     selectedNodes.add(selected);
-                    DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(graph, graphCanvas, selected);
-                    dcp.makeGradient();
+                    gcp.paintNode(selected, Color.BLUE);
                 }
                 else{
                     boolean ifAlreadyInside = false;
@@ -121,7 +124,7 @@ public class MainController implements Initializable {
 
     @FXML
     public void onSaveButtonClick() {
-        /*
+
         if (graph == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Musisz najpierw wczytać graf!", ButtonType.OK);
             alert.showAndWait();
@@ -129,16 +132,14 @@ public class MainController implements Initializable {
         if (graph != null){
             try{
                 String filePath = filePathTextField.getText();
-                GraphExporter ge = new GraphTextPrinter(graph, filePath);
-                ge.print();
+                GraphTextPrinter gtp = new GraphTextPrinter(filePath, this.graph);
+                gtp.print();
             }
             catch (Exception e){
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Akcja nie powiodła się.", ButtonType.OK);
                 alert.showAndWait();
             }
         }
-
-         */
     }
 
     @FXML
@@ -154,10 +155,39 @@ public class MainController implements Initializable {
 
     @FXML
     public void onImportButtonClick() {
+        GraphTextReader gtr = new GraphTextReader(filePathTextField.getText()); //filePathTextField.getText()
+
+        try {
+            this.graph = gtr.read();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Musisz podac nazwę pliku.", ButtonType.OK);
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
     public void onBfsButtonClick() {
+        BfsSolver bfs = new BfsSolver(graph);
+        if (graph == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Musisz najpierw wczytać graf!", ButtonType.OK);
+            alert.showAndWait();
+        }
+
+
+        try {
+            boolean cohesion = bfs.solve();
+            if (cohesion == true) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Graf jest spojny", ButtonType.OK);
+                alert.showAndWait();
+            }
+            else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Graf nie jest spojny", ButtonType.OK);
+                alert.showAndWait();
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     @FXML
