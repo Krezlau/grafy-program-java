@@ -20,22 +20,22 @@ public class GraphTextPrinter extends GraphPrinter{
         output.write(String.format("%d %d\n",graph.getRows(),graph.getCollumns()));
 
         for (int i = 0; i < graph.getSize(); i++) {
-            output.write(String.format("     "));
-            for (int j = 0; j < graph.getNodeToGraph(i).getSize(); j++) {
-                output.write(String.format("%d :%.16f  ", graph.getNodeToGraph(i).getEdgeToNode(j).getNodeId(), graph.getNodeToGraph(i).getEdgeToNode(j).getWeight()));
+            output.write("     ");
+            for (int j = 0; j < graph.getNodeFromGraph(i).getSize(); j++) {
+                output.write(String.format("%d :%.16f  ", graph.getNodeFromGraph(i).getEdgeFromNode(j).getNodeId(), graph.getNodeFromGraph(i).getEdgeFromNode(j).getWeight()));
             }
-            output.write(String.format("\n"));
+            output.write("\n");
         }
         output.close();
     }
 
     //probne wypisywanie zawartosci grafu do konsoli
-    public void printToConsol() {
+    public void printToConsoll() {
         System.out.println(graph.getRows() + " " + graph.getCollumns());
         for (int i = 0; i < graph.getSize(); i++) {
 
-            for (int j = 0; j < graph.getNodeToGraph(i).getSize(); j++) {
-                System.out.print(graph.getNodeToGraph(i).getEdgeToNode(j).getNodeId() + " :" + graph.getNodeToGraph(i).getEdgeToNode(j).getWeight());
+            for (int j = 0; j < graph.getNodeFromGraph(i).getSize(); j++) {
+                System.out.print(graph.getNodeFromGraph(i).getEdgeFromNode(j).getNodeId() + " :" + graph.getNodeFromGraph(i).getEdgeFromNode(j).getWeight());
             }
             System.out.println();
         }
