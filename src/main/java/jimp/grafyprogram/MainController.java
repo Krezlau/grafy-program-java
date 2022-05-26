@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import jimp.grafyprogram.functions.BfsSolver;
@@ -69,6 +66,7 @@ public class MainController implements Initializable {
             onRedrawButtonClick();
         }
         catch(Exception e){
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, "Akcja nie powiodła się.", ButtonType.OK);
             alert.showAndWait();
         }
@@ -83,6 +81,8 @@ public class MainController implements Initializable {
             if (selected != null) {
                 if (selectedNodes.size() == 0) {
                     selectedNodes.add(selected);
+                    DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(graph, graphCanvas, selected);
+                    dcp.makeGradient();
                     gcp.paintNode(selected, Color.BLUE);
                 }
                 else{
@@ -177,7 +177,7 @@ public class MainController implements Initializable {
 
         try {
             boolean cohesion = bfs.solve();
-            if (cohesion == true) {
+            if (cohesion) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Graf jest spojny", ButtonType.OK);
                 alert.showAndWait();
             }
@@ -186,7 +186,7 @@ public class MainController implements Initializable {
                 alert.showAndWait();
             }
         } catch (Exception e) {
-
+            throw new RuntimeException(e);
         }
     }
 
