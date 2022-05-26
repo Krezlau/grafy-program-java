@@ -12,11 +12,5 @@ import java.util.Scanner;
 import java.util.regex.MatchResult;
 
 abstract public class GraphReader {
-
-
-
-
-
-
     abstract public Graph read() throws IOException;
 }

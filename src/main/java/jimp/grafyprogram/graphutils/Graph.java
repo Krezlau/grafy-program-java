@@ -54,9 +54,10 @@ public class Graph {
     public void addNodeToGraph(int nodeId, Node item) {
         nodes.add(nodeId, item);
     }
-    public Node getNodeToGraph(int nodeId) {
+    public Node getNodeFromGraph(int nodeId) {
         return nodes.get(nodeId);
     }
+
     public int getSize() {
         return nodes.size();
     }

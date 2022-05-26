@@ -36,7 +36,7 @@ public class Node {
 
     }
 
-    public Edge getEdgeToNode(int nodeId) {
+    public Edge getEdgeFromNode(int nodeId) {
         return edges.get(nodeId);
     }
     public int getSize() {
