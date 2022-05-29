@@ -22,6 +22,7 @@ public class MainController implements Initializable {
 
     private Graph graph;
     private ObservableList<Node> selectedNodes;
+    private final GraphGenerator graphGenerator = new GraphGenerator();
 
     @FXML
     private TextField gridSizeTextField;
@@ -73,7 +74,7 @@ public class MainController implements Initializable {
             return;
         }
 
-        graph = new Graph(columns, rows, start, end);
+        graph = graphGenerator.generate(columns, rows, start, end);
         gridSizeTextField.clear();
         edgeWeightTextField.clear();
 
@@ -89,7 +90,7 @@ public class MainController implements Initializable {
             if (selected != null) {
                 if (selectedNodes.size() == 0) {
                     selectedNodes.add(selected);
-                    DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(graph, graphCanvas, selected);
+                    DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(selected, gcp);
                     dcp.makeGradient();
                 }
                 else{
@@ -122,7 +123,7 @@ public class MainController implements Initializable {
 
             if (selectedNodes.size() > 0){
                 gcp.paintNode(selectedNodes.get(0), Color.BLUE);
-                DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(graph, graphCanvas, selectedNodes.get(0));
+                DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(selectedNodes.get(0), gcp);
                 dcp.makeGradient();
             }
             for (int i = 1; i < selectedNodes.size(); i++){
@@ -133,7 +134,6 @@ public class MainController implements Initializable {
 
     @FXML
     public void onSaveButtonClick() {
-        /*
         if (graph == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Musisz najpierw wczytać graf!", ButtonType.OK);
             alert.showAndWait();
@@ -141,7 +141,7 @@ public class MainController implements Initializable {
         if (graph != null){
             try{
                 String filePath = filePathTextField.getText();
-                GraphExporter ge = new GraphTextPrinter(graph, filePath);
+                GraphTextPrinter ge = new GraphTextPrinter(graph, filePath);
                 ge.print();
             }
             catch (Exception e){
@@ -149,8 +149,6 @@ public class MainController implements Initializable {
                 alert.showAndWait();
             }
         }
-
-         */
     }
 
     @FXML
@@ -199,12 +197,11 @@ public class MainController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    }
 
     @FXML
     public void onDijkstraButtonClick() {
         if (graph != null && selectedNodes.size() > 1) {
-            DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(graph, graphCanvas, selectedNodes.get(0));
+            DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(selectedNodes.get(0), new GraphCanvasPrinter(graph, graphCanvas));
             for (int i = 1; i < selectedNodes.size(); i++) {
                 dcp.print(selectedNodes.get(i));
             }
