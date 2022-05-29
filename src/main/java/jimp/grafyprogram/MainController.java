@@ -10,8 +10,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import jimp.grafyprogram.functions.DijkstraCanvasPrinter;
 import jimp.grafyprogram.graphutils.*;
+import jimp.grafyprogram.functions.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -141,7 +141,7 @@ public class MainController implements Initializable {
         if (graph != null){
             try{
                 String filePath = filePathTextField.getText();
-                GraphTextPrinter ge = new GraphTextPrinter(graph, filePath);
+                GraphTextPrinter ge = new GraphTextPrinter(filePath, graph);
                 ge.print();
             }
             catch (Exception e){
