@@ -51,4 +51,15 @@ public class Graph {
     public int getRows() {
         return rows;
     }
+    public void addNodeToGraph(int nodeId, Node item) {
+        nodes.add(nodeId, item);
+    }
+    public Node getNodeFromGraph(int nodeId) {
+        return nodes.get(nodeId);
+    }
+
+    public int getSize() {
+        return nodes.size();
+    }
+
 }

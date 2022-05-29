@@ -10,6 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import jimp.grafyprogram.functions.BfsSolver;
 import jimp.grafyprogram.functions.DijkstraCanvasPrinter;
 import jimp.grafyprogram.graphutils.*;
 
@@ -91,6 +92,7 @@ public class MainController implements Initializable {
                     selectedNodes.add(selected);
                     DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(graph, graphCanvas, selected);
                     dcp.makeGradient();
+                    gcp.paintNode(selected, Color.BLUE);
                 }
                 else{
                     boolean ifAlreadyInside = false;
@@ -133,7 +135,7 @@ public class MainController implements Initializable {
 
     @FXML
     public void onSaveButtonClick() {
-        /*
+
         if (graph == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Musisz najpierw wczytać graf!", ButtonType.OK);
             alert.showAndWait();
@@ -141,16 +143,14 @@ public class MainController implements Initializable {
         if (graph != null){
             try{
                 String filePath = filePathTextField.getText();
-                GraphExporter ge = new GraphTextPrinter(graph, filePath);
-                ge.print();
+                GraphTextPrinter gtp = new GraphTextPrinter(filePath, this.graph);
+                gtp.print();
             }
             catch (Exception e){
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Akcja nie powiodła się.", ButtonType.OK);
                 alert.showAndWait();
             }
         }
-
-         */
     }
 
     @FXML
@@ -198,7 +198,6 @@ public class MainController implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
     }
 
     @FXML
