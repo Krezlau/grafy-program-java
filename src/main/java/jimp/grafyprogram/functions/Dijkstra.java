@@ -56,4 +56,8 @@ abstract public class Dijkstra {
     }
 
     abstract public void print(Node end);
+
+    public NodeDistance[] getDistances() {
+        return distances;
+    }
 }

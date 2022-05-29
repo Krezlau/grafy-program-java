@@ -15,28 +15,22 @@ public class Graph {
         nodes = new ArrayList<>(r*c);
     }
 
-    public Graph(int c, int r, double weightStart, double weightEnd){
-        this.collumns = c;
-        this.rows = r;
-        nodes = new ArrayList<>(r*c);
+    public double [] determineEdgeRange(){
+        double [] edgeRange = new double[2];
+        edgeRange[0] = 999999999;
+        edgeRange[1] = 0;
 
-        Random rd = new Random();
-        for (int i = 0; i < r*c; i++){
-            ArrayList<Edge> tempEdges = new ArrayList<>();
-            if ((i % c) != 0){
-                tempEdges.add(new Edge(i - 1, rd.nextDouble(0,1)));
+        for (Node node : this.getNodes()){
+            for (Edge edge : node.getEdges()){
+                if (edge.getWeight() > edgeRange[1]){
+                    edgeRange[1] = edge.getWeight();
+                }
+                if (edge.getWeight() < edgeRange[0]){
+                    edgeRange[0] = edge.getWeight();
+                }
             }
-            if (((i + 1) % c) != 0){
-                tempEdges.add(new Edge(i + 1, rd.nextDouble(0,1)));
-            }
-            if ((i + c) < (c * r)){
-                tempEdges.add(new Edge(i + c, rd.nextDouble(0,1)));
-            }
-            if ((i - c) >= 0){
-                tempEdges.add(new Edge(i - c, rd.nextDouble(0,1)));
-            }
-            nodes.add(new Node(i, tempEdges));
         }
+        return edgeRange;
     }
 
 

@@ -3,50 +3,71 @@ package jimp.grafyprogram.functions;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import jimp.grafyprogram.graphutils.CanvasGraphCoordinatesDeterminer;
 import jimp.grafyprogram.graphutils.Graph;
 import jimp.grafyprogram.graphutils.GraphCanvasPrinter;
 import jimp.grafyprogram.graphutils.Node;
 
 public class DijkstraCanvasPrinter extends Dijkstra{
 
-    private final Canvas graphCanvas;
+    private final GraphCanvasPrinter graphCanvasPrinter;
 
-    public DijkstraCanvasPrinter(Graph graph, Canvas graphCanvas, Node start){
-        this.graph = graph;
-        this.graphCanvas = graphCanvas;
+    public DijkstraCanvasPrinter(Node start, GraphCanvasPrinter graphCanvasPrinter){
+        this.graphCanvasPrinter = graphCanvasPrinter;
         this.start = start;
+        this.graph = graphCanvasPrinter.getGraph();
         solve();
     }
 
     @Override
     public void print(Node end) {
-        GraphCanvasPrinter gcp = new GraphCanvasPrinter(graph, graphCanvas);
         Node current = end;
         Node next;
 
-        double pathSize = gcp.getNodeSize() / 2;
+        Canvas graphCanvas = graphCanvasPrinter.getGraphCanvas();
+        CanvasGraphCoordinatesDeterminer coordinatesDeterminer = graphCanvasPrinter.getCoordinatesDeterminer();
+
+        double pathSize = coordinatesDeterminer.getNodeSize() / 2;
         GraphicsContext gc = graphCanvas.getGraphicsContext2D();
         gc.setFill(Color.PURPLE);
 
-        gc.fillOval(gcp.getNodeCenterX(current) - pathSize/2, gcp.getNodeCenterY(current) - pathSize/2, pathSize, pathSize);
+        gc.fillOval(coordinatesDeterminer.getNodeCenterX(current) - pathSize/2,
+                coordinatesDeterminer.getNodeCenterY(current) - pathSize/2,
+                pathSize,
+                pathSize);
 
         while (current != start){
             next = graph.getNodes().get(distances[current.getNodeId()].getPrecedingNodeId());
 
             if (next.getNodeId() == current.getNodeId() + 1){
-                gc.fillRect(gcp.getNodeCenterX(current), gcp.getNodeCenterY(current) - pathSize/2, gcp.getNodeSize(), pathSize);
+                gc.fillRect(coordinatesDeterminer.getNodeCenterX(current),
+                        coordinatesDeterminer.getNodeCenterY(current) - pathSize/2,
+                        coordinatesDeterminer.getNodeSize(),
+                        pathSize);
             }
             if (next.getNodeId() == current.getNodeId() - 1){
-                gc.fillRect(gcp.getNodeCenterX(next), gcp.getNodeCenterY(next) - pathSize/2, gcp.getNodeSize(), pathSize);
+                gc.fillRect(coordinatesDeterminer.getNodeCenterX(next),
+                        coordinatesDeterminer.getNodeCenterY(next) - pathSize/2,
+                        coordinatesDeterminer.getNodeSize(),
+                        pathSize);
             }
             if (next.getNodeId() == current.getNodeId() + graph.getCollumns()){
-                gc.fillRect(gcp.getNodeCenterX(current) - pathSize/2, gcp.getNodeCenterY(current), pathSize, gcp.getNodeSize());
+                gc.fillRect(coordinatesDeterminer.getNodeCenterX(current) - pathSize/2,
+                        coordinatesDeterminer.getNodeCenterY(current),
+                        pathSize,
+                        coordinatesDeterminer.getNodeSize());
             }
             if (next.getNodeId() == current.getNodeId() - graph.getCollumns()){
-                gc.fillRect(gcp.getNodeCenterX(next) - pathSize/2, gcp.getNodeCenterY(next), pathSize, gcp.getNodeSize());
+                gc.fillRect(coordinatesDeterminer.getNodeCenterX(next) - pathSize/2,
+                        coordinatesDeterminer.getNodeCenterY(next),
+                        pathSize,
+                        coordinatesDeterminer.getNodeSize());
             }
 
-            gc.fillOval(gcp.getNodeCenterX(next) - pathSize/2, gcp.getNodeCenterY(next) - pathSize/2, pathSize, pathSize);
+            gc.fillOval(coordinatesDeterminer.getNodeCenterX(next) - pathSize/2,
+                    coordinatesDeterminer.getNodeCenterY(next) - pathSize/2,
+                    pathSize,
+                    pathSize);
 
 
             current = graph.getNodes().get(distances[current.getNodeId()].getPrecedingNodeId());
@@ -54,12 +75,11 @@ public class DijkstraCanvasPrinter extends Dijkstra{
     }
 
     public void makeGradient(){
-        GraphCanvasPrinter gcp = new GraphCanvasPrinter(graph, graphCanvas);
         double max = findMaxDistance();
 
         for (NodeDistance nodeDistance : distances){
-                gcp.paintNode(graph.getNodes().get(nodeDistance.getNodeId()),
-                        gcp.determineColor(nodeDistance.getDistance(), 0, max));
+                graphCanvasPrinter.paintNode(graph.getNodes().get(nodeDistance.getNodeId()),
+                        nodeDistance.getDistance(), 0, max);
         }
     }
 
