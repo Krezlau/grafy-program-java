@@ -3,11 +3,12 @@
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jimp.grafyprogram.MainController">
    <children>
-      <Canvas fx:id="graphCanvas" height="880.0" layoutX="10.0" layoutY="100.0" onMouseClicked="#onCanvasMouseClick" width="980.0" />
+      <Canvas fx:id="graphCanvas" height="810.0" layoutX="10.0" layoutY="100.0" onMouseClicked="#onCanvasMouseClick" width="980.0" />
       <TextField fx:id="gridSizeTextField" layoutX="72.0" layoutY="14.0" prefHeight="25.0" prefWidth="100.0" text="60x75" />
       <TextField fx:id="edgeWeightTextField" layoutX="304.0" layoutY="14.0" prefWidth="100.0" text="0-1" />
       <Label layoutX="14.0" layoutY="18.0" text="Grid size:" />
@@ -27,6 +28,8 @@
          </font>
       </Label>
       <Button layoutX="681.0" layoutY="56.0" mnemonicParsing="false" onAction="#onDijkstraButtonClick" text="Znajdź najkrótszą ścieżkę" />
-      <Button layoutX="615.0" layoutY="56.0" mnemonicParsing="false" onAction="#onResetButtonClick" text="Reset" />
+      <Rectangle fx:id="gradientRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="50.0" layoutX="10.0" layoutY="940.0" stroke="BLACK" strokeType="INSIDE" width="980.0" />
+      <Label text="Node / edge weight range" prefWidth="1000" layoutY="920" textAlignment="CENTER" alignment="CENTER"/>
+      <Label text="0.0" layoutX="10" layoutY="920" />
    </children>
 </AnchorPane>
