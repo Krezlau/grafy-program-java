@@ -10,6 +10,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Rectangle;
 import jimp.grafyprogram.graphutils.*;
 import jimp.grafyprogram.functions.*;
 
@@ -34,6 +38,8 @@ public class MainController implements Initializable {
     private Canvas graphCanvas;
     @FXML
     private Label selectedNodesLabel;
+    @FXML
+    private Rectangle gradientRectangle;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -43,12 +49,21 @@ public class MainController implements Initializable {
         GraphicsContext gc = graphCanvas.getGraphicsContext2D();
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, graphCanvas.getWidth(), graphCanvas.getHeight());
+
+        //filling gradient rectangle
+        // start(255,0,0) -> stop1(255,255,0) -> stop2(0,255,0) -> stop3(0,255,255) -> end(0,0,255)
+        Stop[] stops = new Stop[] { new Stop(0, Color.rgb(255,0,0)),
+                                    new Stop(.25, Color.rgb(255,255,0)),
+                                    new Stop(.5, Color.rgb(0,255,0)),
+                                    new Stop(.75, Color.rgb(0,255,255)),
+                                    new Stop(1, Color.rgb(0,0,255))
+        };
+        LinearGradient lg1 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, stops);
+        gradientRectangle.setFill(lg1);
     }
 
     @FXML
     public void onGenerateButtonClick() {
-        onDeleteButtonClick();
-
         String gridSizeText = gridSizeTextField.getText();
         String edgeWeightText = edgeWeightTextField.getText();
 
@@ -74,6 +89,7 @@ public class MainController implements Initializable {
             return;
         }
 
+        onDeleteButtonClick();
         graph = graphGenerator.generate(columns, rows, start, end);
         gridSizeTextField.clear();
         edgeWeightTextField.clear();
@@ -112,23 +128,12 @@ public class MainController implements Initializable {
 
     @FXML
     public void onRedrawButtonClick() {
-        GraphicsContext gc = graphCanvas.getGraphicsContext2D();
-        gc.clearRect(0, 0, graphCanvas.getWidth(), graphCanvas.getHeight());
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, graphCanvas.getWidth(), graphCanvas.getHeight());
+        selectedNodes.clear();
+        clearCanvas();
 
         if (graph != null) {
             GraphCanvasPrinter gcp = new GraphCanvasPrinter(graph, graphCanvas);
             gcp.print();
-
-            if (selectedNodes.size() > 0){
-                gcp.paintNode(selectedNodes.get(0), Color.BLUE);
-                DijkstraCanvasPrinter dcp = new DijkstraCanvasPrinter(selectedNodes.get(0), gcp);
-                dcp.makeGradient();
-            }
-            for (int i = 1; i < selectedNodes.size(); i++){
-                gcp.paintNode(selectedNodes.get(i), Color.GREEN);
-            }
         }
     }
 
@@ -155,12 +160,10 @@ public class MainController implements Initializable {
     public void onDeleteButtonClick() {
         selectedNodes.clear();
         graph = null;
-        GraphicsContext gc = graphCanvas.getGraphicsContext2D();
-        gc.clearRect(0, 0, graphCanvas.getWidth(), graphCanvas.getHeight());
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, graphCanvas.getWidth(), graphCanvas.getHeight());
+        clearCanvas();
     }
 
+    //przy graph = null wywala sie, do poprawy
     @FXML
     public void onImportButtonClick() {
         GraphTextReader gtr = new GraphTextReader(filePathTextField.getText()); //filePathTextField.getText()
@@ -180,9 +183,8 @@ public class MainController implements Initializable {
         if (graph == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Musisz najpierw wczytać graf!", ButtonType.OK);
             alert.showAndWait();
+            return;
         }
-
-
         try {
             boolean cohesion = bfs.solve();
             if (cohesion) {
@@ -222,11 +224,10 @@ public class MainController implements Initializable {
         }
     }
 
-    @FXML
-    public void onResetButtonClick() {
-        if (graph != null) {
-            selectedNodes.clear();
-            onRedrawButtonClick();
-        }
+    private void clearCanvas(){
+        GraphicsContext gc = graphCanvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, graphCanvas.getWidth(), graphCanvas.getHeight());
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0, 0, graphCanvas.getWidth(), graphCanvas.getHeight());
     }
 }
