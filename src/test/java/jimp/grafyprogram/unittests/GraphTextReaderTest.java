@@ -1,51 +1,42 @@
 package jimp.grafyprogram.unittests;
 
-
-import jimp.grafyprogram.graphutils.*;
-import org.junit.After;
-import org.junit.Before;
+import jimp.grafyprogram.graphutils.Edge;
+import jimp.grafyprogram.graphutils.Graph;
+import jimp.grafyprogram.graphutils.GraphTextReader;
+import jimp.grafyprogram.graphutils.Node;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-public class GraphTextPrinterTest {
-    private final PrintStream standardOut = System.out;
-    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+public class GraphTextReaderTest {
 
-    @Before
-    public void setUp() {
-        System.setOut(new PrintStream(outputStreamCaptor));
+    @Test
+    public void testNumberOfRowsTextReader() throws IOException {
+        GraphTextReader graphTextReader = new GraphTextReader("mygraph.txt");
+        Graph testGraphFromFile = graphTextReader.read();
+        int actualRows = testGraphFromFile.getRows();
+        int expectedRows = 7;
+        Assertions.assertEquals(expectedRows, actualRows);
     }
-
-
-    @After
-    public void tearDown() {
-        System.setOut(standardOut);
+    @Test
+    public void testNumberOfCollumnsTextReader() throws IOException {
+        GraphTextReader graphTextReader = new GraphTextReader("mygraph.txt");
+        Graph testGraphFromFile = graphTextReader.read();
+        int actualCollumns = testGraphFromFile.getCollumns();
+        int expectedCollumns = 4;
+        Assertions.assertEquals(expectedCollumns, actualCollumns);
     }
 
     @Test
-    public void printToConsoll() {
-        GraphTextPrinter graphTextPrinter = new GraphTextPrinter(testGraph1());
-        graphTextPrinter.printToConsoll();
-        assertEquals("""
-                3 3
-                     1 :0,76  3 :0,66 \s
-                     0 :0,09  2 :0,03  4 :0,01 \s
-                     1 :0,58  5 :0,71 \s
-                     4 :0,42  6 :0,50  0 :0,07 \s
-                     3 :0,88  5 :0,24  7 :0,04  1 :0,37 \s
-                     4 :0,69  8 :0,38  2 :0,40 \s
-                     7 :0,55  3 :0,53 \s
-                     6 :0,77  8 :0,97  4 :0,68 \s
-                     7 :0,31  5 :0,99 \s
-                """, outputStreamCaptor.toString());
-        }
-
+    public void testGraphFromFile() throws IOException {
+        GraphTextReader graphTextReader = new GraphTextReader("graf");
+        Graph testGraphFromFile = graphTextReader.read();
+        assertTrue(testGraphFromFile.equals(testGraph1()));
+    }
     private Graph testGraph1() {
 
         Graph testGraph1 = new Graph(3, 3);
@@ -89,4 +80,5 @@ public class GraphTextPrinterTest {
 
         return testGraph1;
     }
+
 }
