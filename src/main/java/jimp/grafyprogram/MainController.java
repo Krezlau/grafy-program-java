@@ -140,7 +140,7 @@ public class MainController implements Initializable {
     @FXML
     public void onSaveButtonClick() {
         if (graph == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "You need to load the graph first!\n", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "You need to load the graph first!", ButtonType.OK);
             alert.showAndWait();
         }
         if (graph != null){
@@ -166,7 +166,7 @@ public class MainController implements Initializable {
     //przy graph = null wywala sie, do poprawy
     @FXML
     public void onImportButtonClick() {
-        GraphTextReader gtr = new GraphTextReader(filePathTextField.getText()); //filePathTextField.getText()
+        GraphTextReader gtr = new GraphTextReader(filePathTextField.getText());
 
         try {
             this.graph = gtr.read();
@@ -181,7 +181,7 @@ public class MainController implements Initializable {
     public void onBfsButtonClick() {
         BfsSolver bfs = new BfsSolver(graph);
         if (graph == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "You need to load the graph first!\n", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "You need to load the graph first!", ButtonType.OK);
             alert.showAndWait();
             return;
         }
@@ -209,7 +209,7 @@ public class MainController implements Initializable {
             }
         }
         if (graph == null){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "You need to load the graph first\n!", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "You need to load the graph first!", ButtonType.OK);
             alert.showAndWait();
             return;
         }
