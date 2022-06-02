@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 
-public class GraphCanvasPrinter {
+public class GraphCanvasPrinter{
 
     private final Graph graph;
     private final Canvas graphCanvas;
@@ -47,7 +47,7 @@ public class GraphCanvasPrinter {
             nodeCenterX = 10 + ovalSize/2;
             for (int col = 0; col < graph.getCollumns(); col++) {
                 for (Edge edge : graph.getNodes().get(nodeIndex).getEdges()){
-                    if (edge.getNodeId() == nodeIndex - 1){
+                    if (edge.getNodeId() == nodeIndex - 1 && graph.getCollumns() != 1){
                         gc.setFill(colorPicker.determineColor(edge.getWeight(), edgeRange[0], edgeRange[1]));
                         gc.fillRect(nodeCenterX - nodeSize, nodeCenterY - edgeSize/2, nodeSize, edgeSize);
 
@@ -55,15 +55,15 @@ public class GraphCanvasPrinter {
                         gc.setFill(Color.WHITE);
                         gc.fillOval(nodeX - nodeSize, nodeY, ovalSize, ovalSize);
                     }
-                    if (edge.getNodeId() == nodeIndex + 1){
+                    if (edge.getNodeId() == nodeIndex + 1 && graph.getCollumns() != 1){
                         gc.setFill(colorPicker.determineColor(edge.getWeight(), edgeRange[0], edgeRange[1]));
                         gc.fillRect(nodeCenterX, nodeCenterY - edgeSize/2, nodeSize, edgeSize);
                     }
-                    if (edge.getNodeId() == nodeIndex + graph.getCollumns()){
+                    if (edge.getNodeId() == nodeIndex + graph.getCollumns() && graph.getRows() != 1){
                         gc.setFill(colorPicker.determineColor(edge.getWeight(), edgeRange[0], edgeRange[1]));
                         gc.fillRect(nodeCenterX - edgeSize/2, nodeCenterY, edgeSize, nodeSize);
                     }
-                    if (edge.getNodeId() == nodeIndex - graph.getCollumns()){
+                    if (edge.getNodeId() == nodeIndex - graph.getCollumns() && graph.getRows() != 1){
                         gc.setFill(colorPicker.determineColor(edge.getWeight(), edgeRange[0], edgeRange[1]));
                         gc.fillRect(nodeCenterX - edgeSize/2, nodeCenterY - nodeSize , edgeSize, nodeSize);
 
