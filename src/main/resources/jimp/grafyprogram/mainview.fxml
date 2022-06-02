@@ -19,14 +19,14 @@
       <Button layoutX="923.0" layoutY="14.0" mnemonicParsing="false" onAction="#onImportButtonClick" text="Import" />
       <TextField fx:id="filePathTextField" layoutX="715.0" layoutY="14.0" />
       <Label layoutX="657.0" layoutY="18.0" text="File path:" />
-      <Button layoutX="857.0" layoutY="56.0" mnemonicParsing="false" onAction="#onBfsButtonClick" text="Sprawdź spójność" />
-      <Label layoutX="489.0" layoutY="60.0" text="Wybrane węzły:" />
+      <Button layoutX="857.0" layoutY="56.0" mnemonicParsing="false" onAction="#onBfsButtonClick" text="Check consistency" />
+      <Label layoutX="489.0" layoutY="60.0" text="Selected nodes:" />
       <Label fx:id="selectedNodesLabel" layoutX="580.0" layoutY="51.0" text="2">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Button layoutX="681.0" layoutY="56.0" mnemonicParsing="false" onAction="#onDijkstraButtonClick" text="Znajdź najkrótszą ścieżkę" />
+      <Button layoutX="681.0" layoutY="56.0" mnemonicParsing="false" onAction="#onDijkstraButtonClick" text="Find the shortest path" />
       <Button layoutX="615.0" layoutY="56.0" mnemonicParsing="false" onAction="#onResetButtonClick" text="Reset" />
    </children>
 </AnchorPane>
