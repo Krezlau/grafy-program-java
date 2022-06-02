@@ -29,7 +29,7 @@ public class GraphTextPrinterTest {
     }
 
     @Test
-    public void printToConsoll() {
+    public void printToConsoleTest() {
         GraphTextPrinter graphTextPrinter = new GraphTextPrinter(testGraph1());
         graphTextPrinter.printToConsoll();
         assertEquals("""

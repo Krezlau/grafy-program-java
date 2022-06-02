@@ -163,7 +163,6 @@ public class MainController implements Initializable {
         clearCanvas();
     }
 
-    //przy graph = null wywala sie, do poprawy
     @FXML
     public void onImportButtonClick() {
         GraphTextReader gtr = new GraphTextReader(filePathTextField.getText());
