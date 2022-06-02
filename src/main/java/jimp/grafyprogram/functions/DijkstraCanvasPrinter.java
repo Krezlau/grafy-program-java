@@ -21,6 +21,10 @@ public class DijkstraCanvasPrinter extends Dijkstra{
 
     @Override
     public void print(Node end) {
+        if (distances[end.getNodeId()].getPrecedingNodeId() == -1){
+            return;
+        }
+
         Node current = end;
         Node next;
 
