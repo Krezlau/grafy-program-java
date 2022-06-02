@@ -174,6 +174,9 @@ public class MainController implements Initializable {
             alert.showAndWait();
             throw new RuntimeException(e);
         }
+        clearCanvas();
+        GraphCanvasPrinter gcp = new GraphCanvasPrinter(graph, graphCanvas);
+        gcp.print();
     }
 
     @FXML
