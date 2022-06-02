@@ -31,7 +31,7 @@ public class Node {
             edges.add(nodeId, item);
         }
         else {
-            throw new RuntimeException("Wierzcholek ma za duzo krawedzi!");
+            throw new RuntimeException("The node has too many edges!");
         }
 
     }

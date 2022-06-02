@@ -75,7 +75,7 @@ public class MainController implements Initializable {
             rows = Integer.parseInt(gridSizeText.split("x")[1]);
         }
         catch (Exception e){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Błędny format wymiarów grafu.", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Wrong format of graph dimensions.", ButtonType.OK);
             alert.showAndWait();
             return;
         }
@@ -84,7 +84,7 @@ public class MainController implements Initializable {
             end = Double.parseDouble(edgeWeightText.split("-")[1]);
         }
         catch (Exception e){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Błędny format zakresu wag.", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Wrong format of the weight range.", ButtonType.OK);
             alert.showAndWait();
             return;
         }
@@ -140,7 +140,7 @@ public class MainController implements Initializable {
     @FXML
     public void onSaveButtonClick() {
         if (graph == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Musisz najpierw wczytać graf!", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "You need to load the graph first!\n", ButtonType.OK);
             alert.showAndWait();
         }
         if (graph != null){
@@ -150,7 +150,7 @@ public class MainController implements Initializable {
                 ge.print();
             }
             catch (Exception e){
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Akcja nie powiodła się.", ButtonType.OK);
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Action failed.", ButtonType.OK);
                 alert.showAndWait();
             }
         }
@@ -171,7 +171,7 @@ public class MainController implements Initializable {
         try {
             this.graph = gtr.read();
         } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Musisz podac nazwę pliku.", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "You must enter a file name.", ButtonType.OK);
             alert.showAndWait();
             throw new RuntimeException(e);
         }
@@ -181,18 +181,18 @@ public class MainController implements Initializable {
     public void onBfsButtonClick() {
         BfsSolver bfs = new BfsSolver(graph);
         if (graph == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Musisz najpierw wczytać graf!", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "You need to load the graph first!\n", ButtonType.OK);
             alert.showAndWait();
             return;
         }
         try {
             boolean cohesion = bfs.solve();
             if (cohesion) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Graf jest spojny", ButtonType.OK);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "The graph is coherent.", ButtonType.OK);
                 alert.showAndWait();
             }
             else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Graf nie jest spojny", ButtonType.OK);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "The graph is inconsistent.", ButtonType.OK);
                 alert.showAndWait();
             }
         } catch (Exception e) {
@@ -209,17 +209,17 @@ public class MainController implements Initializable {
             }
         }
         if (graph == null){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Musisz najpierw wczytać graf!", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "You need to load the graph first\n!", ButtonType.OK);
             alert.showAndWait();
             return;
         }
         if (selectedNodes.size() == 0){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Nie wybrano węzła startowego i węzłów docelowych", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "The starting and destination nodes are not selected", ButtonType.OK);
             alert.showAndWait();
             return;
         }
         if (selectedNodes.size() == 1){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Nie wybrano żadnego węzła docelowego", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "No target node selected", ButtonType.OK);
             alert.showAndWait();
         }
     }

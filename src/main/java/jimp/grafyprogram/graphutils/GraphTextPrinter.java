@@ -33,15 +33,15 @@ public class GraphTextPrinter extends GraphPrinter{
         output.close();
     }
 
-    //probne wypisywanie zawartosci grafu do konsoli
+    //wypisywanie zawartosci grafu do konsoli potrzebne do testowania
     public void printToConsoll() {
-        System.out.printf("%d %d\n%n",graph.getRows(),graph.getCollumns());
+        System.out.printf("%d %d\n",graph.getRows(),graph.getCollumns());
         for (int i = 0; i < graph.getSize(); i++) {
-            System.out.println("     ");
+            System.out.print("     ");
             for (int j = 0; j < graph.getNodeFromGraph(i).getSize(); j++) {
-                System.out.printf("%d :%.2",graph.getNodeFromGraph(i).getEdgeFromNode(j).getNodeId(), graph.getNodeFromGraph(i).getEdgeFromNode(j).getWeight());
+                System.out.printf("%d :%.2f  ",graph.getNodeFromGraph(i).getEdgeFromNode(j).getNodeId(), graph.getNodeFromGraph(i).getEdgeFromNode(j).getWeight());
             }
-            System.out.println();
+            System.out.print("\n");
         }
     }
 
