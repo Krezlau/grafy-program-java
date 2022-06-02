@@ -56,4 +56,33 @@ public class Graph {
         return nodes.size();
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (object == null) {
+            return false;
+        }
+
+        if (!(object instanceof Graph)) {
+            return false;
+        }
+
+        Graph other = (Graph) object;
+
+        if(collumns != other.collumns || rows != other.rows) {
+            return false;
+        }
+        for (int i = 0; i < this.getSize(); i++) {
+            for (int j = 0; j < this.getNodeFromGraph(i).getSize(); j++) {
+                if(this.getNodeFromGraph(i).getEdgeFromNode(j).getNodeId() != other.getNodeFromGraph(i).getEdgeFromNode(j).getNodeId()  || this.getNodeFromGraph(i).getEdgeFromNode(j).getWeight() != other.getNodeFromGraph(i).getEdgeFromNode(j).getWeight()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 }
